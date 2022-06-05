@@ -34,43 +34,84 @@ void loop() {
   int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
   int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
   int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
-
-  /*
-  Serial.print("ULT 01: ");
-  Serial.println(ult01);
-  Serial.print("ULT 02: ");
-  Serial.println(ult02);
-  Serial.print("ULT 03: ");
-  Serial.println(ult03);
-  */
   
   if (ult01 > 10) {
     // Robô anda para frente se não houver nenhum obstáculo na frente do robô
     int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+    int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+    int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
     digitalWrite(IN_A1, HIGH);
     digitalWrite(IN_A2, LOW);
     digitalWrite(IN_B1, HIGH);
     digitalWrite(IN_B2, LOW);
     Serial.println("frente");
   }
+  
   if (ult01 < 10) {
+    // Se houver um obstáculo a menos de 10 cm do sensor da frente, irá verificar os outros sensores
     if (ult02 < 10) {
+      // Se houver um obstáculo a menos de 10 cm do sensor da esquerda, o motor gira no sentido horário 
       int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
       int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+      int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
       digitalWrite(IN_A1, HIGH);
       digitalWrite(IN_A2, LOW);
       digitalWrite(IN_B1, LOW);
       digitalWrite(IN_B2, LOW);
-      Serial.println("entrei no 1");
     }
     if (ult03 < 10) {
+      // Se houver um obstáculo a menos de 10 cm do sensor da direita, o motor gira no sentido anti-horário 
       int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+      int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
       int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
       digitalWrite(IN_A1, LOW);
       digitalWrite(IN_A2, LOW);
       digitalWrite(IN_B1, LOW);
       digitalWrite(IN_B2, HIGH);
-      Serial.println("entrei no 2");
     }
+
+    if (ult02 < 10 && ult03 < 10) {
+      // Se houver um obstáculo a menos de 10 cm do sensor da esquerda e da direita, todos os motores travam
+      int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+      int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+      int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
+      digitalWrite(IN_A1, LOW);
+      digitalWrite(IN_A2, LOW);
+      digitalWrite(IN_B1, LOW);
+      digitalWrite(IN_B2, LOW);
+    }
+
+    else {
+      // Se houver um obstáculo a menos de 10 cm apenas do sensor da frente, o motor gira no sentido horário 
+      int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+      int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+      int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
+      digitalWrite(IN_A1, HIGH);
+      digitalWrite(IN_A2, LOW);
+      digitalWrite(IN_B1, LOW);
+      digitalWrite(IN_B2, LOW);
+    }
+  }
+
+  if (ult02 < 5) {
+    // Se houver um obstáculo a menos de 10 cm do sensor da esquerda, o motor gira no sentido horário 
+    int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+    int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+    int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
+    digitalWrite(IN_A1, HIGH);
+    digitalWrite(IN_A2, LOW);
+    digitalWrite(IN_B1, LOW);
+    digitalWrite(IN_B2, LOW);
+  }
+
+  if (ult03 < 5) {
+    // Se houver um obstáculo a menos de 10 cm do sensor da direita, o motor gira no sentido anti-horário 
+    int ult01 = ultrasonic01.convert(ultrasonic01.timing(), Ultrasonic::CM);
+    int ult02 = ultrasonic02.convert(ultrasonic02.timing(), Ultrasonic::CM);
+    int ult03 = ultrasonic03.convert(ultrasonic03.timing(), Ultrasonic::CM);
+    digitalWrite(IN_A1, LOW);
+    digitalWrite(IN_A2, LOW);
+    digitalWrite(IN_B1, LOW);
+    digitalWrite(IN_B2, HIGH);
   }
 }
